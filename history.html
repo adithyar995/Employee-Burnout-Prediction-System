@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Prediction History</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        body{
+
+            margin:0;
+
+            font-family:"Segoe UI",Arial,sans-serif;
+
+            background:#f4f7fb;
+
+            padding:30px;
+        }
+
+
+        .container{
+
+            max-width:1100px;
+
+            margin:auto;
+
+            background:white;
+
+            padding:30px;
+
+            border-radius:20px;
+
+            box-shadow:0 15px 40px rgba(0,0,0,0.08);
+        }
+
+
+        h1{
+
+            text-align:center;
+
+            color:#1e3a5f;
+
+            margin-bottom:25px;
+        }
+
+
+        table{
+
+            width:100%;
+
+            border-collapse:collapse;
+
+            overflow:hidden;
+        }
+
+
+        th{
+
+            background:#4f46e5;
+
+            color:white;
+
+            padding:14px;
+
+            text-align:center;
+        }
+
+
+        td{
+
+            padding:13px;
+
+            text-align:center;
+
+            border-bottom:1px solid #e5eaf0;
+
+            color:#34495e;
+        }
+
+
+        tr:hover{
+
+            background:#f7f9ff;
+        }
+
+
+        .back{
+
+            display:block;
+
+            width:220px;
+
+            margin:25px auto 0;
+
+            padding:13px;
+
+            text-align:center;
+
+            text-decoration:none;
+
+            background:#4f46e5;
+
+            color:white;
+
+            border-radius:10px;
+
+            font-weight:600;
+        }
+
+
+        @media(max-width:700px){
+
+            .container{
+
+                overflow-x:auto;
+            }
+
+            table{
+
+                min-width:800px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        📋 Prediction History
+    </h1>
+
+
+    <table>
+
+        <tr>
+
+            <th>
+                Date
+            </th>
+
+            <th>
+                Age
+            </th>
+
+            <th>
+                Gender
+            </th>
+
+            <th>
+                Job Role
+            </th>
+
+            <th>
+                Work Hours
+            </th>
+
+            <th>
+                Overtime
+            </th>
+
+            <th>
+                Sleep
+            </th>
+
+            <th>
+                Prediction
+            </th>
+
+        </tr>
+
+
+        {% for record in records %}
+
+        <tr>
+
+            <td>
+                {{ record.created_at|date:"d-m-Y H:i" }}
+            </td>
+
+            <td>
+                {{ record.age }}
+            </td>
+
+            <td>
+                {{ record.gender }}
+            </td>
+
+            <td>
+                {{ record.job_role }}
+            </td>
+
+            <td>
+                {{ record.work_hours }}
+            </td>
+
+            <td>
+                {{ record.overtime }}
+            </td>
+
+            <td>
+                {{ record.sleep }}
+            </td>
+
+            <td>
+                <strong>
+                    {{ record.prediction }}
+                </strong>
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="8">
+                No prediction history available.
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+
+    <a
+        href="/"
+        class="back">
+
+        ← Back to Prediction
+
+    </a>
+
+</div>
+
+
+</body>
+
+</html>
