@@ -1,0 +1,3128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Employee Burnout Prediction
+    </title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body {
+
+            min-height: 100vh;
+
+            color: #142653;
+
+            background:
+
+                radial-gradient(
+                    circle at 0% 20%,
+                    rgba(72,126,239,.18),
+                    transparent 23%
+                ),
+
+                radial-gradient(
+                    circle at 100% 0%,
+                    rgba(126,76,239,.18),
+                    transparent 22%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #edf4ff,
+                    #f8f8ff 50%,
+                    #effcff
+                );
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+
+            width: 100%;
+
+            max-width: 1220px;
+
+            margin: auto;
+
+            padding:
+                28px
+                30px
+                25px;
+        }
+
+
+        /* =====================================================
+           TOP HEADER
+        ===================================================== */
+
+        .top-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            padding:
+                4px
+                38px
+                25px;
+        }
+
+
+        .eyebrow {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #5270a5;
+
+            letter-spacing: .4px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .top-header h1 {
+
+            font-size: 34px;
+
+            line-height: 1.1;
+
+            color: #102653;
+
+            letter-spacing: -.7px;
+        }
+
+
+        .top-header h1 span {
+
+            color: #326ee8;
+        }
+
+
+        .subtitle {
+
+            margin-top: 8px;
+
+            color: #536b96;
+
+            font-size: 14px;
+        }
+
+
+        .header-message {
+
+            margin-top: 15px;
+
+            margin-right: 12px;
+
+            text-align: right;
+
+            color: #63759a;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .header-line {
+
+            width: 75px;
+
+            height: 3px;
+
+            border-radius: 10px;
+
+            margin:
+                8px
+                0
+                0
+                auto;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    #2876ed,
+                    #7752ec
+                );
+        }
+
+
+        /* =====================================================
+           MAIN CARD
+        ===================================================== */
+
+        .main-card {
+
+            display: grid;
+
+            grid-template-columns:
+                330px
+                1fr;
+
+            gap: 30px;
+
+            padding:
+                12px
+                20px
+                22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(255,255,255,.82);
+
+            border:
+                1px solid
+                rgba(255,255,255,.95);
+
+            box-shadow:
+                0
+                20px
+                50px
+                rgba(55,82,130,.12);
+
+            backdrop-filter:
+                blur(20px);
+        }
+
+
+        /* =====================================================
+           LEFT COLUMN
+        ===================================================== */
+
+        .left-column {
+
+            padding:
+                0
+                0
+                5px;
+        }
+
+
+        /* =====================================================
+           WELLBEING CARD
+        ===================================================== */
+
+        .wellbeing-card {
+
+            min-height: 415px;
+
+            padding:
+                64px
+                28px
+                30px;
+
+            border-radius: 18px;
+
+            color: white;
+
+            background:
+
+                radial-gradient(
+                    circle at 50% 20%,
+                    rgba(88,160,255,.40),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #3e75e9,
+                    #5967ec 55%,
+                    #714fe7
+                );
+
+            position: relative;
+
+            overflow: hidden;
+
+            box-shadow:
+                0
+                15px
+                30px
+                rgba(67,91,210,.20);
+        }
+
+
+        .wellbeing-card:after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 230px;
+
+            height: 100px;
+
+            right: -20px;
+
+            bottom: 48px;
+
+            border-top:
+                2px solid
+                rgba(255,255,255,.35);
+
+            border-radius: 50%;
+
+            transform:
+                rotate(-12deg);
+        }
+
+
+        .wellbeing-card h2 {
+
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 27px;
+
+            line-height: 1.25;
+
+            margin-bottom: 23px;
+        }
+
+
+        .wellbeing-card p {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 235px;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            color:
+                rgba(255,255,255,.93);
+        }
+
+
+        /* =====================================================
+           BARS
+        ===================================================== */
+
+        .chart-bars {
+
+            position: absolute;
+
+            bottom: 25px;
+
+            right: 62px;
+
+            display: flex;
+
+            align-items: end;
+
+            gap: 9px;
+
+            z-index: 3;
+        }
+
+
+        .bar {
+
+            width: 19px;
+
+            border-radius:
+                6px
+                6px
+                3px
+                3px;
+
+            background:
+                rgba(255,255,255,.35);
+        }
+
+
+        .bar.one {
+            height: 32px;
+        }
+
+
+        .bar.two {
+            height: 51px;
+        }
+
+
+        .bar.three {
+            height: 72px;
+        }
+
+
+        /* =====================================================
+           FEATURES
+        ===================================================== */
+
+        .features {
+
+            margin-top: 20px;
+
+            padding:
+                12px
+                18px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,.60);
+        }
+
+
+        .feature {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding:
+                12px
+                0;
+        }
+
+
+        .feature-icon {
+
+            width: 50px;
+
+            height: 50px;
+
+            min-width: 50px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #2474e8;
+
+            background:
+                #e9f2ff;
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+
+        .feature:nth-child(2)
+        .feature-icon {
+
+            color: #3972e6;
+
+            background:
+                #eaf1ff;
+        }
+
+
+        .feature:nth-child(3)
+        .feature-icon {
+
+            color: #7353e7;
+
+            background:
+                #f0eaff;
+        }
+
+
+        .feature-title {
+
+            color: #142653;
+
+            font-size: 14px;
+
+            font-weight: 750;
+        }
+
+
+        .feature-text {
+
+            color: #60749a;
+
+            font-size: 11px;
+
+            margin-top: 4px;
+
+            line-height: 1.4;
+        }
+
+
+        /* =====================================================
+           QUOTE
+        ===================================================== */
+
+        .quote-card {
+
+            margin-top: 20px;
+
+            padding:
+                22px
+                25px;
+
+            border-radius: 17px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #edf5ff,
+                    #f2f1ff
+                );
+
+            color: #40547d;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            font-style: italic;
+        }
+
+
+        .quote-mark {
+
+            font-size: 32px;
+
+            color: #5792ed;
+
+            font-weight: 800;
+        }
+
+
+        .quote-line {
+
+            width: 48px;
+
+            height: 3px;
+
+            border-radius: 10px;
+
+            margin-top: 15px;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    #3879ed,
+                    #8053ee
+                );
+        }
+
+
+        /* =====================================================
+           RIGHT COLUMN
+        ===================================================== */
+
+        .right-column {
+
+            padding-top: 10px;
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        .section {
+
+            border-radius: 17px;
+
+            overflow: hidden;
+
+            margin-bottom: 17px;
+
+            border:
+                1px solid
+                rgba(210,223,246,.70);
+
+            box-shadow:
+                0
+                5px
+                18px
+                rgba(48,76,125,.06);
+        }
+
+
+        .section.employee {
+
+            background:
+                #f7faff;
+        }
+
+
+        .section.work {
+
+            background:
+                #faf7ff;
+        }
+
+
+        .section.wellbeing {
+
+            background:
+                #f3fffc;
+        }
+
+
+        /* =====================================================
+           SECTION HEADER
+        ===================================================== */
+
+        .section-header {
+
+            min-height: 54px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding:
+                8px
+                17px;
+
+            border-bottom:
+                1px solid
+                rgba(220,228,243,.7);
+        }
+
+
+        .section-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            min-width: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #2784f4,
+                    #2870df
+                );
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+
+        .work .section-icon {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #8450f4,
+                    #6d42dc
+                );
+        }
+
+
+        .wellbeing .section-icon {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #0cc9a3,
+                    #0eae91
+                );
+        }
+
+
+        .section-title {
+
+            margin-left: 13px;
+        }
+
+
+        .section-title h2 {
+
+            font-size: 16px;
+
+            color: #102653;
+        }
+
+
+        .work .section-title h2 {
+
+            color: #4f2ab9;
+        }
+
+
+        .description {
+
+            margin-left: auto;
+
+            color: #63769b;
+
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        .body {
+
+            padding:
+                13px
+                17px
+                14px;
+        }
+
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap:
+                13px
+                27px;
+        }
+
+
+        .field label {
+
+            display: block;
+
+            color: #112653;
+
+            font-size: 12px;
+
+            font-weight: 750;
+
+            margin-bottom: 6px;
+        }
+
+
+        /* =====================================================
+           INPUT / SELECT
+        ===================================================== */
+
+        input,
+        select {
+
+            width: 100%;
+
+            height: 39px;
+
+            border-radius: 9px;
+
+            border:
+                1px solid
+                #ced9eb;
+
+            background:
+                rgba(255,255,255,.92);
+
+            padding:
+                0
+                12px;
+
+            color: #243352;
+
+            font-size: 12px;
+
+            outline: none;
+
+            transition:
+                border .2s,
+                box-shadow .2s;
+        }
+
+
+        input::placeholder {
+
+            color: #8798b4;
+        }
+
+
+        input:focus,
+        select:focus {
+
+            border-color:
+                #4b83ee;
+
+            box-shadow:
+                0
+                0
+                0
+                3px
+                rgba(75,131,238,.09);
+        }
+
+
+        /* ONLY THE WRONG FIELD */
+
+        input.invalid,
+        select.invalid {
+
+            border-color:
+                #e34b51 !important;
+
+            box-shadow:
+                0
+                0
+                0
+                3px
+                rgba(227,75,81,.07);
+        }
+
+
+        input.valid,
+        select.valid {
+
+            border-color:
+                #28a870;
+        }
+
+
+        /* =====================================================
+           RANGE / GUIDE / ERROR
+        ===================================================== */
+
+        .range {
+
+            color: #5f759d;
+
+            font-size: 9.5px;
+
+            margin-top: 4px;
+        }
+
+
+        .guide {
+
+            color: #5f759d;
+
+            font-size: 9px;
+
+            margin-top: 4px;
+        }
+
+
+        .error {
+
+            min-height: 13px;
+
+            color:
+                #dc2626;
+
+            font-size: 9.5px;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .predict-btn {
+
+            width: 100%;
+
+            height: 57px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 750;
+
+            cursor: pointer;
+
+            background:
+
+                linear-gradient(
+                    95deg,
+                    #246fe9,
+                    #5360ec 50%,
+                    #8247ed
+                );
+
+            box-shadow:
+                0
+                9px
+                22px
+                rgba(63,92,224,.23);
+
+            transition:
+                transform .2s,
+                box-shadow .2s;
+        }
+
+
+        .predict-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0
+                13px
+                27px
+                rgba(63,92,224,.30);
+        }
+
+
+        .predict-btn:disabled {
+
+            opacity: .55;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+            box-shadow: none;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            color: #7183a3;
+
+            font-size: 10px;
+
+            padding-top: 13px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:900px) {
+
+            .main-card {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .left-column {
+
+                display: none;
+            }
+        }
+
+
+        @media(max-width:650px) {
+
+            .page {
+
+                padding: 12px;
+            }
+
+
+            .top-header {
+
+                padding:
+                    5px
+                    10px
+                    18px;
+            }
+
+
+            .top-header h1 {
+
+                font-size: 27px;
+            }
+
+
+            .header-message {
+
+                display: none;
+            }
+
+
+            .grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .main-card {
+
+                padding: 10px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- =====================================================
+         TOP HEADER
+    ====================================================== -->
+
+    <div class="top-header">
+
+        <div>
+
+            <div class="eyebrow">
+                EMPLOYEE WELL-BEING
+            </div>
+
+
+            <h1>
+
+                Employee Burnout
+                <span>Prediction</span>
+
+            </h1>
+
+
+            <p class="subtitle">
+
+                Analyze workplace and lifestyle factors to predict
+                burnout risk using machine learning.
+
+            </p>
+
+        </div>
+
+
+        <div class="header-message">
+
+            A Healthier Workforce
+            <br>
+
+            A Brighter Tomorrow
+
+
+            <div class="header-line"></div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAIN CARD
+    ====================================================== -->
+
+    <div class="main-card">
+
+
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================== -->
+
+        <div class="left-column">
+
+
+            <div class="wellbeing-card">
+
+                <h2>
+
+                    Your Well-being
+                    <br>
+                    Matters
+
+                </h2>
+
+
+                <p>
+
+                    Fill in the details to predict your
+                    burnout level and get personalized
+                    insights.
+
+                </p>
+
+
+                <div class="chart-bars">
+
+                    <div class="bar one"></div>
+
+                    <div class="bar two"></div>
+
+                    <div class="bar three"></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FEATURES -->
+
+            <div class="features">
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ▥
+                    </div>
+
+
+                    <div>
+
+                        <div class="feature-title">
+                            Data Driven
+                        </div>
+
+
+                        <div class="feature-text">
+
+                            Accurate prediction using
+                            machine learning
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+
+                    <div>
+
+                        <div class="feature-title">
+                            Confidential
+                        </div>
+
+
+                        <div class="feature-text">
+
+                            Your data is safe and secure
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        +
+                    </div>
+
+
+                    <div>
+
+                        <div class="feature-title">
+                            Better Workplace
+                        </div>
+
+
+                        <div class="feature-text">
+
+                            Take insights for a healthier
+                            and more productive life
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- QUOTE -->
+
+            <div class="quote-card">
+
+                <div class="quote-mark">
+                    “
+                </div>
+
+
+                <div>
+
+                    A healthy employee
+                    builds a stronger
+                    tomorrow.
+
+                </div>
+
+
+                <div class="quote-line"></div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div class="right-column">
+
+
+            <form
+
+                method="POST"
+
+                action="{% url 'predict' %}"
+
+                id="burnoutForm"
+
+                novalidate
+
+            >
+
+                {% csrf_token %}
+
+
+
+                <!-- ERROR FROM DJANGO -->
+
+                {% if error %}
+
+                <div style="
+                    background:#fff1f2;
+                    color:#b91c1c;
+                    border:1px solid #fecdd3;
+                    border-radius:9px;
+                    padding:10px 12px;
+                    margin-bottom:12px;
+                    font-size:11px;
+                ">
+
+                    {{ error }}
+
+                </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================================
+                     SECTION 01
+                ================================================== -->
+
+                <section class="section employee">
+
+
+                    <div class="section-header">
+
+
+                        <div class="section-icon">
+                            ♙
+                        </div>
+
+
+                        <div class="section-title">
+
+                            <h2>
+                                Employee Information
+                            </h2>
+
+                        </div>
+
+
+                        <div class="description">
+
+                            Basic details about the employee
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="body">
+
+
+                        <div class="grid">
+
+
+                            <!-- AGE -->
+
+                            <div class="field">
+
+
+                                <label for="age">
+                                    Age
+                                </label>
+
+
+                                <input
+
+                                    type="number"
+
+                                    id="age"
+
+                                    name="age"
+
+                                    placeholder="Enter age"
+
+                                    min="21"
+
+                                    max="60"
+
+                                    step="1"
+
+                                    required
+
+                                >
+
+
+                                <div class="range">
+
+                                    Age range:
+                                    21 - 60 years
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="ageError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- GENDER -->
+
+                            <div class="field">
+
+
+                                <label for="gender">
+                                    Gender
+                                </label>
+
+
+                                <select
+
+                                    id="gender"
+
+                                    name="gender"
+
+                                    required
+
+                                >
+
+                                    <option value="">
+
+                                        Select Gender
+
+                                    </option>
+
+
+                                    {% for gender in genders %}
+
+                                    <option value="{{ gender }}">
+
+                                        {{ gender }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="genderError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- JOB ROLE -->
+
+                            <div class="field">
+
+
+                                <label for="job_role">
+                                    Job Role
+                                </label>
+
+
+                                <select
+
+                                    id="job_role"
+
+                                    name="job_role"
+
+                                    required
+
+                                >
+
+                                    <option value="">
+
+                                        Select Job Role
+
+                                    </option>
+
+
+                                    {% for role in job_roles %}
+
+                                    <option value="{{ role }}">
+
+                                        {{ role }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="jobRoleError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- EXPERIENCE -->
+
+                            <div class="field">
+
+
+                                <label for="experience_years">
+
+                                    Experience (Years)
+
+                                </label>
+
+
+                                <input
+
+                                    type="number"
+
+                                    id="experience_years"
+
+                                    name="experience_years"
+
+                                    placeholder="Enter experience"
+
+                                    min="0"
+
+                                    max="35"
+
+                                    step="1"
+
+                                    required
+
+                                >
+
+
+                                <div class="range">
+
+                                    Experience range:
+                                    0 - 35 years
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="experienceError"
+
+                                ></div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SECTION 02
+                ================================================== -->
+
+                <section class="section work">
+
+
+                    <div class="section-header">
+
+
+                        <div class="section-icon">
+                            ▣
+                        </div>
+
+
+                        <div class="section-title">
+
+                            <h2>
+
+                                Work &amp; Lifestyle Information
+
+                            </h2>
+
+                        </div>
+
+
+                        <div class="description">
+
+                            Work pattern and daily routine
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="body">
+
+
+                        <div class="grid">
+
+
+                            <!-- WORK HOURS -->
+
+                            <div class="field">
+
+
+                                <label for="work_hours_per_week">
+
+                                    Work Hours Per Week
+
+                                </label>
+
+
+                                <input
+
+                                    type="number"
+
+                                    id="work_hours_per_week"
+
+                                    name="work_hours_per_week"
+
+                                    placeholder="Enter work hours"
+
+                                    min="35"
+
+                                    max="60"
+
+                                    step="1"
+
+                                    required
+
+                                >
+
+
+                                <div class="range">
+
+                                    Work hours range:
+                                    35 - 60 hours/week
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="workHoursError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- OVERTIME -->
+
+                            <div class="field">
+
+
+                                <label for="overtime_hours">
+
+                                    Overtime Hours
+
+                                </label>
+
+
+                                <input
+
+                                    type="number"
+
+                                    id="overtime_hours"
+
+                                    name="overtime_hours"
+
+                                    placeholder="Enter overtime hours"
+
+                                    min="0"
+
+                                    max="15"
+
+                                    step="1"
+
+                                    required
+
+                                >
+
+
+                                <div class="range">
+
+                                    Overtime range:
+                                    0 - 15 hours
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="overtimeError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- SLEEP -->
+
+                            <div class="field">
+
+
+                                <label for="sleep_hours">
+
+                                    Sleep Hours
+
+                                </label>
+
+
+                                <input
+
+                                    type="number"
+
+                                    id="sleep_hours"
+
+                                    name="sleep_hours"
+
+                                    placeholder="Enter sleep hours"
+
+                                    min="4.5"
+
+                                    max="9"
+
+                                    step="0.1"
+
+                                    required
+
+                                >
+
+
+                                <div class="range">
+
+                                    Sleep range:
+                                    4.5 - 9 hours/day
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="sleepError"
+
+                                ></div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SECTION 03
+                ================================================== -->
+
+                <section class="section wellbeing">
+
+
+                    <div class="section-header">
+
+
+                        <div class="section-icon">
+                            ♡
+                        </div>
+
+
+                        <div class="section-title">
+
+                            <h2>
+                                Employee Well-being
+                            </h2>
+
+                        </div>
+
+
+                        <div class="description">
+
+                            Rate your overall well-being
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="body">
+
+
+                        <div class="grid">
+
+
+                            <!-- WORK LIFE BALANCE -->
+
+                            <div class="field">
+
+
+                                <label for="work_life_balance">
+
+                                    Work-Life Balance (1-5)
+
+                                </label>
+
+
+                                <select
+
+                                    id="work_life_balance"
+
+                                    name="work_life_balance"
+
+                                    required
+
+                                >
+
+                                    <option value="">
+
+                                        Enter value
+
+                                    </option>
+
+
+                                    <option value="1">
+                                        1
+                                    </option>
+
+                                    <option value="2">
+                                        2
+                                    </option>
+
+                                    <option value="3">
+                                        3
+                                    </option>
+
+                                    <option value="4">
+                                        4
+                                    </option>
+
+                                    <option value="5">
+                                        5
+                                    </option>
+
+                                </select>
+
+
+                                <div class="guide">
+
+                                    1 Very Poor ·
+                                    2 Poor ·
+                                    3 Average ·
+                                    4 Good ·
+                                    5 Excellent
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="workLifeError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- JOB SATISFACTION -->
+
+                            <div class="field">
+
+
+                                <label for="job_satisfaction">
+
+                                    Job Satisfaction (1-5)
+
+                                </label>
+
+
+                                <select
+
+                                    id="job_satisfaction"
+
+                                    name="job_satisfaction"
+
+                                    required
+
+                                >
+
+                                    <option value="">
+
+                                        Enter value
+
+                                    </option>
+
+
+                                    <option value="1">
+                                        1
+                                    </option>
+
+                                    <option value="2">
+                                        2
+                                    </option>
+
+                                    <option value="3">
+                                        3
+                                    </option>
+
+                                    <option value="4">
+                                        4
+                                    </option>
+
+                                    <option value="5">
+                                        5
+                                    </option>
+
+                                </select>
+
+
+                                <div class="guide">
+
+                                    1 Very Low ·
+                                    2 Low ·
+                                    3 Moderate ·
+                                    4 High ·
+                                    5 Very High
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="satisfactionError"
+
+                                ></div>
+
+
+                            </div>
+
+
+
+                            <!-- MANAGER SUPPORT -->
+
+                            <div class="field">
+
+
+                                <label for="manager_support">
+
+                                    Manager Support (1-5)
+
+                                </label>
+
+
+                                <select
+
+                                    id="manager_support"
+
+                                    name="manager_support"
+
+                                    required
+
+                                >
+
+                                    <option value="">
+
+                                        Enter value
+
+                                    </option>
+
+
+                                    <option value="1">
+                                        1
+                                    </option>
+
+                                    <option value="2">
+                                        2
+                                    </option>
+
+                                    <option value="3">
+                                        3
+                                    </option>
+
+                                    <option value="4">
+                                        4
+                                    </option>
+
+                                    <option value="5">
+                                        5
+                                    </option>
+
+                                </select>
+
+
+                                <div class="guide">
+
+                                    1 Very Low ·
+                                    2 Low ·
+                                    3 Moderate ·
+                                    4 High ·
+                                    5 Very High
+
+                                </div>
+
+
+                                <div
+
+                                    class="error"
+
+                                    id="managerError"
+
+                                ></div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     BUTTON
+                ================================================== -->
+
+                <button
+
+                    type="submit"
+
+                    class="predict-btn"
+
+                    id="submitBtn"
+
+                >
+
+                    Predict Burnout Level
+                    &nbsp;&nbsp; →
+
+                </button>
+
+
+                <div class="footer">
+
+                    Employee Burnout Prediction System
+                    using Machine Learning
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     VALIDATION JAVASCRIPT
+========================================================== -->
+
+<script>
+
+
+const form =
+    document.getElementById(
+        "burnoutForm"
+    );
+
+
+const submitBtn =
+    document.getElementById(
+        "submitBtn"
+    );
+
+
+/*
+    IMPORTANT:
+
+    false = user has not submitted yet.
+
+    So empty fields will NOT become red
+    while the user is entering values.
+*/
+
+let submitted = false;
+
+
+
+/* =========================================================
+   ERROR HANDLER
+========================================================= */
+
+function showError(
+    input,
+    error,
+    message
+) {
+
+    error.textContent =
+        message;
+
+
+    if (message !== "") {
+
+        input.classList.add(
+            "invalid"
+        );
+
+        input.classList.remove(
+            "valid"
+        );
+
+    }
+
+    else {
+
+        input.classList.remove(
+            "invalid"
+        );
+
+
+        if (
+            input.value.trim() !== ""
+        ) {
+
+            input.classList.add(
+                "valid"
+            );
+
+        }
+
+        else {
+
+            input.classList.remove(
+                "valid"
+            );
+        }
+    }
+}
+
+
+
+/* =========================================================
+   INTEGER VALIDATION
+========================================================= */
+
+function validateInteger(
+
+    inputId,
+
+    errorId,
+
+    min,
+
+    max,
+
+    fieldName
+
+) {
+
+    const input =
+        document.getElementById(
+            inputId
+        );
+
+
+    const error =
+        document.getElementById(
+            errorId
+        );
+
+
+    const value =
+        input.value.trim();
+
+
+
+    /* EMPTY */
+
+    if (value === "") {
+
+        if (submitted) {
+
+            showError(
+
+                input,
+
+                error,
+
+                fieldName +
+                " is required."
+
+            );
+
+            return false;
+        }
+
+
+        showError(
+            input,
+            error,
+            ""
+        );
+
+        return false;
+    }
+
+
+
+    /* DECIMAL / TEXT */
+
+    if (!/^\d+$/.test(value)) {
+
+        showError(
+
+            input,
+
+            error,
+
+            fieldName +
+            " must be a whole number."
+
+        );
+
+        return false;
+    }
+
+
+
+    const number =
+        Number(value);
+
+
+
+    /* RANGE */
+
+    if (
+        number < min ||
+        number > max
+    ) {
+
+        showError(
+
+            input,
+
+            error,
+
+            fieldName +
+            " must be between " +
+            min +
+            " and " +
+            max +
+            "."
+
+        );
+
+        return false;
+    }
+
+
+
+    /* VALID */
+
+    showError(
+        input,
+        error,
+        ""
+    );
+
+
+    return true;
+}
+
+
+
+/* =========================================================
+   SLEEP VALIDATION
+========================================================= */
+
+function validateSleep() {
+
+    const input =
+        document.getElementById(
+            "sleep_hours"
+        );
+
+
+    const error =
+        document.getElementById(
+            "sleepError"
+        );
+
+
+    const value =
+        input.value.trim();
+
+
+
+    if (value === "") {
+
+        if (submitted) {
+
+            showError(
+
+                input,
+
+                error,
+
+                "Sleep Hours is required."
+
+            );
+
+            return false;
+        }
+
+
+        showError(
+            input,
+            error,
+            ""
+        );
+
+        return false;
+    }
+
+
+
+    if (
+        !/^\d+(\.\d+)?$/.test(value)
+    ) {
+
+        showError(
+
+            input,
+
+            error,
+
+            "Sleep Hours must be a valid number."
+
+        );
+
+        return false;
+    }
+
+
+
+    const number =
+        Number(value);
+
+
+
+    if (
+        number < 4.5 ||
+        number > 9
+    ) {
+
+        showError(
+
+            input,
+
+            error,
+
+            "Sleep Hours must be between 4.5 and 9."
+
+        );
+
+        return false;
+    }
+
+
+
+    showError(
+        input,
+        error,
+        ""
+    );
+
+
+    return true;
+}
+
+
+
+/* =========================================================
+   SELECT VALIDATION
+========================================================= */
+
+function validateSelect(
+
+    inputId,
+
+    errorId,
+
+    fieldName
+
+) {
+
+    const input =
+        document.getElementById(
+            inputId
+        );
+
+
+    const error =
+        document.getElementById(
+            errorId
+        );
+
+
+
+    if (
+        input.value === ""
+    ) {
+
+        if (submitted) {
+
+            showError(
+
+                input,
+
+                error,
+
+                fieldName +
+                " is required."
+
+            );
+
+            return false;
+        }
+
+
+        showError(
+            input,
+            error,
+            ""
+        );
+
+        return false;
+    }
+
+
+
+    showError(
+        input,
+        error,
+        ""
+    );
+
+
+    return true;
+}
+
+
+
+/* =========================================================
+   AGE LIVE VALIDATION
+========================================================= */
+
+document
+    .getElementById("age")
+    .addEventListener(
+        "input",
+        function () {
+
+            validateInteger(
+
+                "age",
+
+                "ageError",
+
+                21,
+
+                60,
+
+                "Age"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   EXPERIENCE LIVE VALIDATION
+========================================================= */
+
+document
+    .getElementById(
+        "experience_years"
+    )
+    .addEventListener(
+        "input",
+        function () {
+
+            validateInteger(
+
+                "experience_years",
+
+                "experienceError",
+
+                0,
+
+                35,
+
+                "Experience"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   WORK HOURS LIVE VALIDATION
+========================================================= */
+
+document
+    .getElementById(
+        "work_hours_per_week"
+    )
+    .addEventListener(
+        "input",
+        function () {
+
+            validateInteger(
+
+                "work_hours_per_week",
+
+                "workHoursError",
+
+                35,
+
+                60,
+
+                "Work Hours"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   OVERTIME LIVE VALIDATION
+========================================================= */
+
+document
+    .getElementById(
+        "overtime_hours"
+    )
+    .addEventListener(
+        "input",
+        function () {
+
+            validateInteger(
+
+                "overtime_hours",
+
+                "overtimeError",
+
+                0,
+
+                15,
+
+                "Overtime Hours"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   SLEEP LIVE VALIDATION
+========================================================= */
+
+document
+    .getElementById(
+        "sleep_hours"
+    )
+    .addEventListener(
+        "input",
+        function () {
+
+            validateSleep();
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   GENDER
+========================================================= */
+
+document
+    .getElementById("gender")
+    .addEventListener(
+        "change",
+        function () {
+
+            validateSelect(
+
+                "gender",
+
+                "genderError",
+
+                "Gender"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   JOB ROLE
+========================================================= */
+
+document
+    .getElementById("job_role")
+    .addEventListener(
+        "change",
+        function () {
+
+            validateSelect(
+
+                "job_role",
+
+                "jobRoleError",
+
+                "Job Role"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   WORK LIFE BALANCE
+========================================================= */
+
+document
+    .getElementById(
+        "work_life_balance"
+    )
+    .addEventListener(
+        "change",
+        function () {
+
+            validateSelect(
+
+                "work_life_balance",
+
+                "workLifeError",
+
+                "Work-Life Balance"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   JOB SATISFACTION
+========================================================= */
+
+document
+    .getElementById(
+        "job_satisfaction"
+    )
+    .addEventListener(
+        "change",
+        function () {
+
+            validateSelect(
+
+                "job_satisfaction",
+
+                "satisfactionError",
+
+                "Job Satisfaction"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   MANAGER SUPPORT
+========================================================= */
+
+document
+    .getElementById(
+        "manager_support"
+    )
+    .addEventListener(
+        "change",
+        function () {
+
+            validateSelect(
+
+                "manager_support",
+
+                "managerError",
+
+                "Manager Support"
+
+            );
+
+            checkButton();
+
+        }
+    );
+
+
+
+/* =========================================================
+   CHECK ALL FIELDS
+========================================================= */
+
+function validateAllFields() {
+
+    let valid = true;
+
+
+
+    if (
+        !validateInteger(
+
+            "age",
+
+            "ageError",
+
+            21,
+
+            60,
+
+            "Age"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateSelect(
+
+            "gender",
+
+            "genderError",
+
+            "Gender"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateSelect(
+
+            "job_role",
+
+            "jobRoleError",
+
+            "Job Role"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateInteger(
+
+            "experience_years",
+
+            "experienceError",
+
+            0,
+
+            35,
+
+            "Experience"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateInteger(
+
+            "work_hours_per_week",
+
+            "workHoursError",
+
+            35,
+
+            60,
+
+            "Work Hours"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateInteger(
+
+            "overtime_hours",
+
+            "overtimeError",
+
+            0,
+
+            15,
+
+            "Overtime Hours"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateSleep()
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateSelect(
+
+            "work_life_balance",
+
+            "workLifeError",
+
+            "Work-Life Balance"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateSelect(
+
+            "job_satisfaction",
+
+            "satisfactionError",
+
+            "Job Satisfaction"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    if (
+        !validateSelect(
+
+            "manager_support",
+
+            "managerError",
+
+            "Manager Support"
+
+        )
+    ) {
+
+        valid = false;
+
+    }
+
+
+
+    return valid;
+}
+
+
+
+/* =========================================================
+   BUTTON CHECK
+
+   IMPORTANT:
+   Empty fields do NOT turn red while typing.
+========================================================= */
+
+function checkButton() {
+
+    const values = [
+
+        document.getElementById(
+            "age"
+        ).value.trim(),
+
+
+        document.getElementById(
+            "gender"
+        ).value,
+
+
+        document.getElementById(
+            "job_role"
+        ).value,
+
+
+        document.getElementById(
+            "experience_years"
+        ).value.trim(),
+
+
+        document.getElementById(
+            "work_hours_per_week"
+        ).value.trim(),
+
+
+        document.getElementById(
+            "overtime_hours"
+        ).value.trim(),
+
+
+        document.getElementById(
+            "sleep_hours"
+        ).value.trim(),
+
+
+        document.getElementById(
+            "work_life_balance"
+        ).value,
+
+
+        document.getElementById(
+            "job_satisfaction"
+        ).value,
+
+
+        document.getElementById(
+            "manager_support"
+        ).value
+
+    ];
+
+
+
+    /*
+       If anything is empty,
+       button remains disabled.
+
+       But empty fields are NOT
+       shown as red.
+    */
+
+    const allFilled =
+        values.every(
+            value =>
+                value !== ""
+        );
+
+
+
+    if (!allFilled) {
+
+        submitBtn.disabled = true;
+
+        return;
+    }
+
+
+
+    /*
+       Temporarily prevent empty-field
+       error messages.
+    */
+
+    const oldSubmitted =
+        submitted;
+
+
+    submitted = false;
+
+
+    const valid =
+        validateAllFields();
+
+
+    submitted =
+        oldSubmitted;
+
+
+    submitBtn.disabled =
+        !valid;
+}
+
+
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+form.addEventListener(
+    "submit",
+    function (event) {
+
+
+        /*
+           Now show every missing/
+           invalid field.
+        */
+
+        submitted = true;
+
+
+        const valid =
+            validateAllFields();
+
+
+
+        if (!valid) {
+
+            event.preventDefault();
+
+            submitBtn.disabled =
+                true;
+
+            return;
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+submitBtn.disabled = true;
+
+</script>
+
+
+</body>
+
+</html>
